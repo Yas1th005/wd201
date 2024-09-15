@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <style>
+        body{
+            padding: 0px;
+            margin:0px;
+            position: relative;
+        }
+        .main{
+            display: flex;
+            gap: 10px;
+        }
+        .left{
+            flex-basis: 40%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form{
+            background-color: #f9f9f9;
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+                        0 1px 3px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+        }
+        .each{
+            display: flex;
+            gap: 10px;
+            width: 500px;
+            margin: 10px 0px;
+        }
+        label{
+            flex-basis: 30%;
+        }
+        input{
+            flex-basis: 70%;
+            padding: 7px;
+            border-radius: 5px;
+        }
+        table{
+            border-collapse: collapse;
+            margin: 50px;
+        }
+        th{
+            border:2px solid black;
+            padding: 7px;
+            background-color: aquamarine;
+        }
+        td{
+            border:2px solid black;
+            padding: 7px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="left">
+            <form id="form" onsubmit="take(event)">
+                <div class="each">
+                    <label>Name</label>
+                    <input type="text" placeholder="Enter Name" id="name" required>
+                </div>
+                <div class="each">
+                    <label>Email</label>
+                    <input type="email" placeholder="abc@gmail.com" id="email" required>
+                </div>
+                <div class="each">
+                    <label>Password</label>
+                    <input type="password" placeholder="Enter Password" id="password" required>
+                </div>
+                <div class="each">
+                    <label>Date of Birth</label>
+                    <input type="date" name="dob" id="dob" required>
+                </div>
+                <div style="margin:5px 0px;">
+                    <input type="checkbox" id="accept" required>
+                    <label>Accept terms and conditions</label>
+                </div>
+                <button type="submit" style="background-color: green; color: white;border-radius: 5px;padding: 5px;">Submit</button>
+            </form>
+        </div>
+        <div class="right">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Dob</th>
+                        <th>Accepted terms?</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tableBody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div>
+        <a href="/projects">Projects</a>
+        <a href="/">Home</a>
+    </div>
+    <script src="../Last/index.js"></script>
+    <script>
+        let today = new Date();
+        let min = new Date(today.getFullYear() - 55, today.getMonth(), today.getDate());
+        let max = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+        let minDate = min.toISOString().split('T')[0];
+        let maxDate = max.toISOString().split('T')[0];
+        const birthdate = document.getElementById('dob');
+        birthdate.setAttribute('min', minDate);
+        birthdate.setAttribute('max', maxDate);
+
+        function add(data) {
+            let Data = JSON.parse(localStorage.getItem('formData')) || [];
+            Data.push(data);
+            localStorage.setItem('formData', JSON.stringify(Data));
+        }
+
+        function display() {
+            let Data = JSON.parse(localStorage.getItem('formData')) || [];
+            let tbody = document.getElementById("tableBody");
+            tbody.innerHTML='';
+            Data.map(data => {
+                let tr = document.createElement("tr");
+                for (let key in data) {
+                    let td = document.createElement("td");
+                    td.textContent = data[key];
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            });
+        }
+
+        function take(event) {
+            event.preventDefault();
+            let formData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value,
+                dob: document.getElementById("dob").value,
+                accept: document.getElementById("accept").checked ? "true" : "false"
+            };
+            add(formData);
+            display();
+            document.getElementById("form").reset();
+        }
+        window.onload = display;
+
+    </script>
+</body>
+</html>
