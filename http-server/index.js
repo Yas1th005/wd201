@@ -14,7 +14,7 @@ const server=http.createServer((req,resp)=>{
                 resp.end(data);
             }           
         })
-    }else if(req.url==='/registration'){
+    }else if(req.url=='/registration'){
         fs.readFile("registration.html",(err,data)=>{
             if(err){
                 resp.writeHead(404,{'Content-Type':'text/plain'});
@@ -23,7 +23,7 @@ const server=http.createServer((req,resp)=>{
                 resp.end(data);
             }
         })
-    }else if(req.url==='/projects'){
+    }else if(req.url=='/projects'){
         fs.readFile("project.html",(err,data)=>{
             if(err){
                 resp.writeHead(404,{'Content-Type':'text/plain'});
