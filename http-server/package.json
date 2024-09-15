@@ -4,5 +4,6 @@
   "main": "index.js",
   "dependencies": {
     "minimist": "^1.2.8"
-  }
+  },
+  "scripts":{"start":"node index.js"}
 }
