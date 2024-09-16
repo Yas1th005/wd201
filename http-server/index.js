@@ -35,4 +35,4 @@ const server=http.createServer((req,resp)=>{
     }else{
         resp.writeHead(404,{'Content-Type':'text/plain'});
     }
-}).listen(args.port)
+}).listen(parseInt(args.port))
