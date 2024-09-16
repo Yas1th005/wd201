@@ -36,7 +36,7 @@ http
     let url = request.url;
     response.writeHeader(200, { "Content-Type": "text/html" });
     switch (url) {
-        case "/project":
+        case "/projects":
             response.write(projectContent);
             response.end();
             break;
