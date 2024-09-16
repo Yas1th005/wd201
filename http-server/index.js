@@ -1,38 +1,53 @@
-const http=require('http');
-const fs=require('fs');
-const minimist=require('minimist');
+const http = require("http");
+const fs = require("fs");
+const minimist = require("minimist");
+
 
 const args = minimist(process.argv.slice(2));
+const port = parseInt(args.port);
 
-const server=http.createServer((req,resp)=>{
-    if(req.url==="/"){       
-        fs.readFile('home.html',(err,data)=>{
-            if(err){
-                resp.writeHead(404,{'Content-Type':'text/plain'});
-            }else{
-                resp.writeHead(200,{'Content-Type':'text/html'});
-                resp.end(data);
-            }           
-        })
-    }else if(req.url=='/registration'){
-        fs.readFile("registration.html",(err,data)=>{
-            if(err){
-                resp.writeHead(404,{'Content-Type':'text/plain'});
-            }else{
-                resp.writeHead(200,{'Content-Type':'text/html'});
-                resp.end(data);
-            }
-        })
-    }else if(req.url=='/projects'){
-        fs.readFile("project.html",(err,data)=>{
-            if(err){
-                resp.writeHead(404,{'Content-Type':'text/plain'});
-            }else{
-                resp.writeHead(200,{'Content-Type':'text/html'});
-                resp.end(data);
-            }
-        })
-    }else{
-        resp.writeHead(404,{'Content-Type':'text/plain'});
+let homeContent = "";
+let projectContent = "";
+let registrationForm = "";
+
+fs.readFile("home.html", (err, home) => {
+  if (err) {
+    throw err;
+  }
+  homeContent = home;
+});
+
+fs.readFile("project.html", (err, project) => {
+  if (err) {
+    throw err;
+  }
+  projectContent = project;
+});
+
+fs.readFile("registration.html", (err, form) => {
+    if (err) {
+        throw err;
     }
-}).listen(parseInt(args.port))
+    registrationForm = form;
+});
+
+http
+  .createServer((request, response) => {
+    let url = request.url;
+    response.writeHeader(200, { "Content-Type": "text/html" });
+    switch (url) {
+        case "/project":
+            response.write(projectContent);
+            response.end();
+            break;
+        case "/registration":
+            response.write(registrationForm);
+            response.end();
+            break;
+        default:
+            response.write(homeContent);
+            response.end();
+            break;
+    }
+  })
+  .listen(port);
